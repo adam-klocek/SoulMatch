@@ -10,7 +10,7 @@
 | Warm Ivory | #F4EDE6 | Page canvas and atmosphere |
 | Lavender | #B59AC6 | Reflection progress, fit indicators, friendship accents |
 
-Light tinted surfaces carry dark teal text. Coral/lavender are accents, not low-contrast white-text button backgrounds. Supporting paper is #FFFCF8. The platform system sans provides clear application headings and controls, with Georgia used for selective editorial emphasis and numbers without external font tracking/downloads. The interlaced loop mark suggests two independent lives meeting, without a heart motif.
+Light tinted surfaces carry dark teal text. Coral/lavender are accents, not low-contrast white-text button backgrounds. Supporting paper is #FFFCF8. The platform system sans provides clear application headings and controls, with Georgia used for selective editorial emphasis and numbers without external font tracking/downloads. The current mark is a single tilted matchstick: deep-teal stem, muted-coral flame, and a small soft-peach heart suggestion. See BRAND-ASSETS.md for clear space, minimum sizing, dark and monochrome use. The wordmark is outlined Nunito Sans SemiBold; no font download is needed. The older interlaced-loop mark is preserved only as historical source.
 
 - Cards: 20–25px corners; restrained borders and shadows.
 - Buttons: softly rounded, readable dark teal primary actions; minimum 42px height (46px on principal mobile choices).

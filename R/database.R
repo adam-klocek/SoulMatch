@@ -1,6 +1,7 @@
 open_db <- function(path) {
   dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE, mode = "0700")
   con <- DBI::dbConnect(RSQLite::SQLite(), path)
+  Sys.chmod(path,"0600")
   DBI::dbExecute(con, "PRAGMA foreign_keys=ON")
   DBI::dbExecute(con, "PRAGMA secure_delete=ON")
   DBI::dbExecute(con, "PRAGMA journal_mode=WAL")
@@ -20,6 +21,8 @@ open_db <- function(path) {
     "CREATE TABLE IF NOT EXISTS reports(id TEXT PRIMARY KEY, actor_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, target_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, reason TEXT NOT NULL, created_at TEXT NOT NULL)")
   for (sql in statements) DBI::dbExecute(con, sql)
   migrate_soulmatch(con)
+  private_files<-c(path,paste0(path,"-wal"),paste0(path,"-shm"))
+  Sys.chmod(private_files[file.exists(private_files)], "0600")
   con
 }
 get_profile <- function(con, id) {
@@ -43,7 +46,7 @@ register_user <- function(con, username, password) {
   id
 }
 authenticate <- function(con, username, password) {
-  u <- DBI::dbGetQuery(con, "SELECT id,password_hash FROM users WHERE username=?", params = list(tolower(trimws(username))))
+  u <- DBI::dbGetQuery(con, "SELECT id,password_hash FROM users WHERE username=? AND status='active'", params = list(tolower(trimws(username))))
   if (!nrow(u) || !isTRUE(tryCatch(sodium::password_verify(u$password_hash[[1]], password), error = function(e) FALSE))) return(NULL)
   u$id[[1]]
 }
@@ -73,7 +76,10 @@ save_profile <- function(con, id, p) {
   DBI::dbWithTransaction(con, {
     DBI::dbExecute(con, "INSERT INTO profiles(user_id,name,age,gender,interested,city,bio,height,income,style,smoking,goal,hobbies,preferences,consent,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET name=excluded.name,age=excluded.age,gender=excluded.gender,interested=excluded.interested,city=excluded.city,bio=excluded.bio,income=excluded.income,style=excluded.style,smoking=excluded.smoking,goal=excluded.goal,hobbies=excluded.hobbies,preferences=excluded.preferences,consent=excluded.consent,updated_at=excluded.updated_at", params = list(id, p$name, as.integer(p$age), p$gender, to_json(as.list(p$interested)), p$city, p$bio, derived_height, p$income, p$style, p$smoking, p$goal, to_json(as.list(p$hobbies)), to_json(prefs), as.integer(isTRUE(as.logical(p$consent))), now_utc()))
     # Withdrawal excludes historical impressions from any later training export.
-    if (!isTRUE(as.logical(p$consent))) DBI::dbExecute(con, "UPDATE impressions SET consent=0 WHERE actor_id=? OR target_id=?", params = list(id, id))
+    if (!isTRUE(as.logical(p$consent))) {
+      DBI::dbExecute(con, "UPDATE impressions SET consent=0 WHERE actor_id=? OR target_id=?", params = list(id, id))
+      DBI::dbExecute(con, "UPDATE post_date_feedback SET research_consent=0 WHERE user_id=? OR target_id=?", params = list(id,id))
+    }
     DBI::dbExecute(con, "UPDATE profiles SET connection_modes=? WHERE user_id=?", params = list(to_json(as.list(unique(p$connection_modes))), id))
   })
   invisible(id)
@@ -94,9 +100,11 @@ save_decision <- function(con, actor, target, decision, impression_id, registry,
     assert(nrow(impression) == 1, "Refresh discovery before deciding.")
     DBI::dbExecute(con, "INSERT INTO decisions VALUES(?,?,?,?,?) ON CONFLICT(actor_id,target_id,mode) DO UPDATE SET decision=excluded.decision,updated_at=excluded.updated_at", params = list(actor, target, decision, now_utc(), mode))
     DBI::dbExecute(con, "UPDATE impressions SET decision=? WHERE id=?", params = list(decision, impression_id))
+    DBI::dbExecute(con, "INSERT INTO user_interest_events VALUES(?,?,?,?,?,?,?)", params = list(new_id(),actor,target,mode,decision,impression_id,now_utc()))
   })
 }
 send_message <- function(con, sender, receiver, body, mode = "love") {
+  rate_limit(con,sender,"message",30,60)
   body <- clean_text(body, 2000)
   assert(nzchar(body), "Write a message first.")
   DBI::dbWithTransaction(con, {
@@ -106,7 +114,7 @@ send_message <- function(con, sender, receiver, body, mode = "love") {
 }
 read_messages <- function(con, a, b, mode = "love") {
   assert(is_mutual(con, a, b, mode), "This conversation is unavailable.")
-  DBI::dbGetQuery(con, "SELECT * FROM (SELECT * FROM messages WHERE mode=? AND ((sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?)) ORDER BY id DESC LIMIT 200) ORDER BY id", params = list(mode, a, b, b, a))
+  DBI::dbGetQuery(con, "SELECT * FROM (SELECT * FROM messages WHERE mode=? AND ((sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?)) ORDER BY id DESC LIMIT 200) AS recent ORDER BY id", params = list(mode, a, b, b, a))
 }
 delete_account <- function(con, id, photo_dir) {
   files <- DBI::dbGetQuery(con, "SELECT filename FROM photos WHERE user_id=?", params = list(id))$filename

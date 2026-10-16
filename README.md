@@ -1,6 +1,9 @@
-# SoulMatch — Love, Friends, or both
+# SoulMatch 1.0 — Meaningful connections begin with a spark
 
-**Connection, considered.** A functional R Shiny MVP with a warm Modern Romance identity, personality-informed introductions, optional interest/lifestyle discovery, and separate Love and Friends connections.
+**1.0.1 startup fix:** the initial logo is now an inline status panel, not a fullscreen overlay. It disappears when the screen content arrives, even if the connection event was missed. A slow/failed startup reveals a reload control after 15 seconds; JavaScript-disabled browsers receive an explicit message. Restart the app after updating source files. This patch requires no database migration.
+
+
+**Connection, considered.** A functional R Shiny local pilot with a warm Modern Romance identity, personality-informed introductions, optional interest/lifestyle discovery, and separate Love and Friends connections.
 
 ## Start here
 
@@ -33,7 +36,16 @@ shiny::runApp(".")
 
 The demo portraits are fictional AI-created assets; your uploaded photos take precedence. Never use shared demo credentials for real members. Demo accounts are excluded from model exports even if consent is later enabled.
 
-## What changed in 0.3
+## Version 1 — The First Spark
+
+The new burning-matchstick identity is integrated throughout the app. Transparent SVG variations live in `www/brand/`, with a vector proof sheet at `design/soulmatch-spark-brand-sheet.svg` and PNG preview. Motion is optional and off by default.
+
+Daily Connections starts with six saved introductions per day and connection space. Refresh reuses the collection; Save for later sends no request; Explore more is an explicit choice. New profile context records availability, multiple intentions, essential/strong/nice preferences and optional Beyond the Photo prompts. Your tools contains Dating Insights and private after-meeting feedback. An administrator can review aggregate research, exposure, psychometric reliability, recorded offline evaluations and reports, with audited controls.
+
+See **RELEASE-V1.md** for the assessment, implementation sequence, changed-file summary, acceptance details, upgrade/rollback and remaining work. See **DEPLOYMENT-V1.md** for hosting boundaries. Schema 4 preserves existing accounts, responses, photos and conversations; back up the complete private data directory before upgrading. Full PostgreSQL/Supabase and private object-storage integration is still required before a real cloud launch. This release does not claim production readiness or validated romantic prediction.
+
+## Earlier 0.3 foundation
+
 
 The app now uses a centered, full-width workspace with a horizontal navigation bar, readable controls, restrained cards, and responsive desktop/mobile layouts. Custom CSS and JavaScript are embedded in the Shiny page; icons also have explicit fallback dimensions. Styling no longer depends on a separate app.css download or a stale CSS cache.
 
@@ -41,14 +53,14 @@ The app now uses a centered, full-width workspace with a horizontal navigation b
 
 **My world** is a connection dashboard. It shows people you have chosen to connect with, separately labeled Request sent or Mutual interest, with Love/Friends and status filters. Every card has a photo area and seven aggregate metrics: overall fit, your preference fit, their preference fit, reflection similarity, lifestyle fit, shared interests, and activity potential. Unavailable optional comparisons are labeled Unavailable rather than displayed as measured neutral fit. Romantic preferences are labeled Not applied in Friends. Overall fit uses the Thoughtful balance baseline and can include neutral imputations for unanswered inputs; it is not a probability. Message opens the correct mode-specific conversation for mutual connections only. Incoming non-mutual requests, blocked people, paused spaces, private preference values, and individual questionnaire answers are not exposed.
 
-**Upgrade:** stop the old app, back up your private data folder, replace the application source files with this version, retain the same private data directory, and restart. No new database migration is needed for 0.3. Use the whole extracted folder, including www; do not copy app.R alone. Existing accounts, decisions, photos, and conversations continue to use the same database.
+**Upgrade:** stop the old app, back up your private data folder, replace the application source files with this version, retain the same private data directory, and restart. For version 1, additive migration 4 runs automatically; follow the backup/rollback instructions in RELEASE-V1.md. Use the whole extracted folder, including www; do not copy app.R alone. Existing accounts, decisions, photos, and conversations continue to use the same database.
 
 ## Existing MVP features
 
 
 | Area | Implemented behavior |
 | --- | --- |
-| Brand | SoulMatch name, interlaced loop mark, exact teal/coral/peach/ivory/lavender palette, editorial typography, responsive cards and horizontal navigation |
+| Brand | SoulMatch name, burning matchstick mark, exact teal/coral/peach/ivory/lavender palette, editorial typography, responsive cards and horizontal navigation |
 | Intentions | Enable Love, Friends, or both simultaneously; switch discovery views without changing your saved intentions |
 | Connections | Requests and passes are scoped by mode; a Love decision never creates a Friends match. Separate conversations with the same person are supported |
 | Profile | Identity, romantic gender interest, city, bio, style, intention, optional income, photos, modes and preferences remain editable |
@@ -61,7 +73,7 @@ The app now uses a centered, full-width workspace with a horizontal navigation b
 | Lifestyle | Seven supplied lifestyle questions, each with independently recorded partner-matching importance |
 | Together | Shared activities from selected interests plus all 12 supplied defaults; optional Nice to have / Important / Essential ratings |
 | Persistence | Normalized tables, private drafts, six-step resume, immutable completed snapshots, questionnaire versions and timestamps |
-| Matching | Two selectable baselines plus optional evaluated supervised model infrastructure; independent interest/lifestyle feature extraction; both similarity and complementarity available for future research |
+| Matching | Three selectable baselines plus optional evaluated supervised model infrastructure; independent interest/lifestyle feature extraction; both similarity and complementarity available for future research |
 | Control | Mutual connection required for chat, two-second message polling, global blocking, report records, photo removal and password-confirmed deletion |
 
 ## Love and Friends are independent spaces
@@ -129,7 +141,7 @@ Unselected interests are **not automatically dislikes**. Sharing satisfaction us
 
 Raw extraction preserves unavailable values as `NA`. Model inputs impute a neutral 0.5 with separate coverage indicators; discovery labels these placeholders; My world shows unavailable component measurements explicitly. These are provisional implementation choices to evaluate, not psychometric claims.
 
-`R/matching.R` separates eligibility, direction-aware features and registered scorers. Both current rankers return experimental 0–100 fit points. Exploration promotes people outside soft Love preferences while respecting firm boundaries and mode eligibility. The optional learned ranker estimates a **connection request after a logged view**, conditional on mode. It does not predict a relationship, and it never multiplies two directional outputs into an asserted mutual probability.
+`R/matching.R` separates eligibility, direction-aware features and registered scorers. All three baseline rankers return experimental 0–100 fit points. Exploration promotes people outside soft Love preferences while respecting firm boundaries and mode eligibility. The optional learned ranker estimates a **connection request after a logged view**, conditional on mode. It does not predict a relationship, and it never multiplies two directional outputs into an asserted mutual probability.
 
 Add a trusted scorer with `register_algorithm()`, returning a finite number in `[0,1]`. Keep eligibility outside the scorer. If features change, update `FEATURE_NAMES`, snapshots and tests together. A new questionnaire/feature registry invalidates older trained artifacts.
 
@@ -142,7 +154,7 @@ Rscript scripts/train_model.R /private/path/decisions.jsonl /private/path/evalua
 
 Exports require both people's consent before a view and continued consent at export. They exclude demo users, raw answers, photos, messages, usernames and exact preferences. Explicit mode-scoped connection/pass decisions are labels; silence is never rejection. Pseudonymous behavioral feature records still require private handling. Withdrawal excludes prior pair records from later exports, but cannot recall previous exports or retrain a deployed model.
 
-Training requires at least 2,000 explicit decisions; uses fitting, Platt calibration and held-out test partitions grouped by unordered pair's first appearance; reports AUROC, Brier, ECE, baseline Brier, per-mode metrics and exploratory questionnaire ablations. Users can occur across partitions; grouped first-appearance splitting is **not a strict future-only or cold-start-user evaluation**. Repeated selection on one test set, exposure-policy bias and absent subgroup audits remain research limitations.
+Training requires at least 2,000 explicit decisions; uses fitting, Platt calibration and held-out temporal partitions grouped by unordered pair's first appearance; reports AUROC, Brier, ECE, baseline Brier, per-mode metrics and exploratory questionnaire ablations. Users can occur across partitions; later records/outcomes from earlier pairs are excluded at strict time boundaries; this is still **not a cold-start-user evaluation**. Repeated selection on one test set, exposure-policy bias and absent subgroup audits remain research limitations.
 
 An evaluation artifact stays inactive. After independent review, an operator can request a limited pilot:
 
@@ -174,9 +186,9 @@ Before real public use, add hardened/verified identity and recovery, global abus
 ## Visual reference and verification
 
 - `design/mobile-design-board.png` / `.svg`: the earlier 0.2 illustrative mobile reference, not the current 0.3 layout or a browser screenshot.
-- `design/identity.md`: visual system.
+- `design/identity.md` and `design/BRAND-ASSETS.md`: visual system and current logo usage.
 - `design/ASSETS.md`: fictional portrait provenance and generation prompt.
-- `www/assets/soulmatch-mark.svg`: reusable vector mark.
+- `www/brand/`: current matchstick SVG family; the older loop asset is retained as historical source.
 - `VALIDATION.md`: executed checks and limits.
 
 ```sh

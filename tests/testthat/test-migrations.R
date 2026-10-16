@@ -24,7 +24,7 @@ testthat::test_that("a legacy database loses retired measurements and retains ac
   testthat::expect_true(is_mutual(con, "a", "b", "love"))
   testthat::expect_false(is_mutual(con, "a", "b", "friends"))
   testthat::expect_identical(read_messages(con, "a", "b", "love")$body, "Kept conversation")
-  testthat::expect_equal(max(DBI::dbGetQuery(con, "SELECT version FROM schema_version")$version), 3)
+  testthat::expect_equal(max(DBI::dbGetQuery(con, "SELECT version FROM schema_version")$version), 4)
   testthat::expect_false(migrate_soulmatch(con))
   folder <- tempfile(); dir.create(folder); withr::defer(unlink(folder, recursive=TRUE))
   file.create(file.path(folder, "kindred.sqlite"))

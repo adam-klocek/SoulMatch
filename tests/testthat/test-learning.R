@@ -34,14 +34,14 @@ testthat::test_that("learning fits, calibrates, evaluates, ablates, and respects
   testthat::expect_gt(model$metrics$auc, .65)
   testthat::expect_length(model$ablations, 2)
   path <- tempfile(fileext = ".rds"); saveRDS(model, path)
-  testthat::expect_warning(testthat::expect_length(algorithm_registry(registry, path), 2), "not loaded")
+  testthat::expect_warning(testthat::expect_length(algorithm_registry(registry, path), 3), "not loaded")
   model <- train_like_model(records, registry, approve = TRUE); saveRDS(model, path)
   algorithms <- algorithm_registry(registry, path)
   testthat::expect_true(algorithms$like_glm$learned)
   p <- algorithms$like_glm$predict(unlist(records[[1]]$features))
   testthat::expect_true(p >= 0 && p <= 1)
   registry[["soulmatch_big_five10@1.0.0"]]$use_for_matching <- FALSE
-  testthat::expect_warning(testthat::expect_length(algorithm_registry(registry, path), 2), "not loaded")
+  testthat::expect_warning(testthat::expect_length(algorithm_registry(registry, path), 3), "not loaded")
   records[[2]]$pair_id <- records[[1]]$pair_id
   split <- time_pair_split(records)
   testthat::expect_identical(unname(split[as.character(records[[1]]$pair_id)]), unname(split[as.character(records[[2]]$pair_id)]))

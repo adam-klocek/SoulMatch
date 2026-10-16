@@ -30,12 +30,18 @@ meets_boundaries <- function(viewer, candidate) {
 eligible_pair <- function(con, a, b, mode = "love") {
   !is.null(a) && !is.null(b) && a$user_id != b$user_id && a$age >= 18 && b$age >= 18 &&
     mode %in% CONNECTION_MODES && mode %in% a$connection_modes && mode %in% b$connection_modes &&
-    !has_block(con, a$user_id, b$user_id) && (mode == "friends" ||
+    !has_block(con, a$user_id, b$user_id) && v1_pair_allowed(con, a, b, mode) && (mode == "friends" ||
       (b$gender %in% a$interested && a$gender %in% b$interested && meets_boundaries(a, b) && meets_boundaries(b, a)))
 }
 pair_features <- function(con, a, b, registry, exclude = character(), mode = "love") {
   ab <- preference_fit(a, b, mode); ba <- preference_fit(b, a, mode)
   qs <- questionnaire_similarity(con, a$user_id, b$user_id, registry, exclude)
+  if (mode == "love") {
+    cx <- context_fit(member_context(con,a$user_id), member_context(con,b$user_id))
+    cy <- context_fit(member_context(con,b$user_id), member_context(con,a$user_id))
+    if (is.finite(cx)) ab$score <- mean(c(ab$score,cx))
+    if (is.finite(cy)) ba$score <- mean(c(ba$score,cy))
+  }
   hobbies <- union(a$hobbies, b$hobbies)
   result <- c(own_preferences = ab$score, other_preferences = ba$score,
     questionnaire_similarity = qs$similarity, questionnaire_coverage = qs$coverage,
@@ -60,12 +66,21 @@ register_algorithm <- function(registry, id, label, version, score, description,
 }
 algorithm_registry <- function(questionnaires, model_path = "config/models/like_glm.rds") {
   algorithms <- list()
-  algorithms <- register_algorithm(algorithms, "balanced", "Thoughtful balance", "2.0.0",
-    function(x) if (x["is_friend_mode"] == 1) .35 * mean(x[c("own_interest_satisfaction", "other_interest_satisfaction")]) + .25 * x["lifestyle_compatibility"] + .2 * x["shared_activity_potential"] + .1 * x["same_city"] + .1 * x["interest_overlap"] else .4 * mean(x[c("own_preferences", "other_preferences")]) + .2 * x["questionnaire_similarity"] + .15 * mean(x[c("own_interest_satisfaction", "other_interest_satisfaction")]) + .1 * x["lifestyle_compatibility"] + .1 * x["shared_activity_potential"] + .05 * x["same_goal"],
+  algorithms <- register_algorithm(algorithms, "balanced", "Thoughtful balance", "3.0.0",
+    local({ weights <- matching_config()$weights; function(x) {
+      w <- unlist(weights[[if (x[["is_friend_mode"]] == 1) "friends" else "love"]])
+      assert(all(names(w) %in% names(x)) && all(w >= 0) && abs(sum(w)-1)<1e-8, "Invalid matching weights.")
+      sum(x[names(w)] * w)
+    }}),
     "Balances what matters to both of you. Friends emphasizes shared activities and lifestyle; Love also considers romantic preferences. Experimental ranking.")
   algorithms <- register_algorithm(algorithms, "reciprocal", "Mutual fit first", "2.0.0",
     function(x) if (x["is_friend_mode"] == 1) .5 * min(x[c("own_interest_satisfaction", "other_interest_satisfaction")]) + .3 * x["shared_activity_potential"] + .2 * x["lifestyle_compatibility"] else .65 * min(x[c("own_preferences", "other_preferences")]) + .15 * x["questionnaire_similarity"] + .1 * x["shared_activity_potential"] + .1 * x["same_goal"],
     "Gives more weight to the weaker of the two preference fits. Experimental heuristic.")
+  algorithms <- register_algorithm(algorithms, "rules", "Common ground", "1.0.0", function(x) {
+    values <- x[c("lifestyle_compatibility", "shared_activity_potential", "interest_overlap")]
+    if (x[["is_friend_mode"]] == 0) values <- c(values,x[c("own_preferences","other_preferences","same_goal")])
+    mean(values)
+  }, "A simple equal-weight common-ground baseline. Essential requirements always apply before ranking.")
   if (file.exists(model_path)) {
     # Trusted administrator artifact only. Never load user-uploaded RDS files.
     model <- readRDS(model_path)

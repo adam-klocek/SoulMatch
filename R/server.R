@@ -1,5 +1,6 @@
 app_server <- function(input, output, session, db_path, photo_dir, questionnaires, algorithms, demo_mode) {
   con <- open_db(db_path)
+  registered_algorithms(con, algorithms)
   session$onSessionEnded(function() DBI::dbDisconnect(con))
   user <- reactiveVal(NULL); revision <- reactiveVal(0L); candidate <- reactiveVal(NULL); impression <- reactiveVal(NULL)
   page <- reactiveVal(1L); drafts <- reactiveVal(list()); last_auth <- reactiveVal(as.POSIXct("2000-01-01", tz = "UTC"))
@@ -9,6 +10,10 @@ app_server <- function(input, output, session, db_path, photo_dir, questionnaire
   pulse <- reactive({ invalidateLater(2000, session); Sys.time() })
   profile <- reactive({ req(user()); revision(); get_profile(con, user()) })
   current_mode <- reactive({ p <- profile(); req(!is.null(p)); if (input$discovery_mode %in% p$connection_modes && length(input$discovery_mode) == 1) input$discovery_mode else p$connection_modes[[1]] })
+  mod_intentions_server("intentions",con,user,bump)
+  mod_insights_server("insights",con,user,questionnaires,revision)
+  mod_post_date_server("postdate",con,user,revision,bump)
+  mod_admin_server("admin",con,user,questionnaires,algorithms,revision,bump)
   catalog <- load_interest_catalog()
   modules <- discovery_module_definitions(questionnaires)
   active_module <- reactiveVal("")
@@ -67,6 +72,7 @@ app_server <- function(input, output, session, db_path, photo_dir, questionnaire
   })
   check_auth_rate <- function() {
     assert(as.numeric(difftime(Sys.time(), isolate(last_auth()), units = "secs")) >= 2, "Please wait a moment before trying again.")
+    rate_limit(con,tolower(input$username %||% ""),"authentication",10L,300L)
     last_auth(Sys.time())
   }
   observeEvent(input$login, attempt({
@@ -91,7 +97,7 @@ app_server <- function(input, output, session, db_path, photo_dir, questionnaire
   observeEvent(input$open_height, { req(user()); open_module(Filter(function(m) m$kind == "height", modules)[[1]]) })
   output$welcome <- renderUI({
     p <- profile()
-    tags$div(class = "welcome-line", tags$div(class = "welcome-greeting", tags$span(class = "welcome-avatar", if (is.null(p)) "S" else substr(p$name, 1, 1)), tags$span(if (is.null(p)) "Welcome to your next beginning." else paste0("A little space for you, ", p$name, "."))), pill("THOUGHTFUL CONNECTIONS, EVERY DAY", "lavender"))
+    tags$div(class = "welcome-line", tags$div(class = "welcome-greeting", brand_mark(), tags$span(class = "welcome-avatar", if (is.null(p)) "S" else substr(p$name, 1, 1)), tags$span(if (is.null(p)) "Welcome to your next beginning." else paste0("A little space for you, ", p$name, "."))), pill("THOUGHTFUL CONNECTIONS, EVERY DAY", "lavender"))
   })
   output$mode_picker <- renderUI({
     p <- profile(); req(!is.null(p)); prior <- isolate(input$discovery_mode)
@@ -186,31 +192,61 @@ app_server <- function(input, output, session, db_path, photo_dir, questionnaire
     if (!completed_required(con, user(), questionnaires)) return(tags$div(class = "notice", "Your 10-question personality introduction unlocks discovery. Everything else is optional.", actionButton("start_questions", "Get to know myself →", class = "btn-primary")))
     NULL
   })
+  observe({pulse();if(!is.null(user()) && !user_active(con,user())) {user(NULL);candidate(NULL);message_cache(data.frame());showNotification("This account is unavailable. Contact the operator.",type="warning")}})
   output$algorithm_note <- renderUI({ req(input$algorithm); tags$p(algorithms[[input$algorithm]]$description) })
   observe({
     req(user()); mode <- current_mode()
-    available <- Filter(function(a) !isTRUE(a$learned) || mode %in% a$supported_modes, algorithms)
+    revision()
+    enabled <- DBI::dbGetQuery(con,"SELECT id FROM matching_algorithms WHERE enabled=1")$id
+    available <- Filter(function(a) a$id %in% enabled && (!isTRUE(a$learned) || mode %in% a$supported_modes), algorithms)
     selected <- isolate(input$algorithm)
-    updateSelectInput(session, "algorithm", choices = setNames(names(available), vapply(available, `[[`, "", "label")), selected = if (length(selected) == 1 && selected %in% names(available)) selected else "balanced")
+    updateSelectInput(session, "algorithm", choices = setNames(names(available), vapply(available, `[[`, "", "label")), selected = if (length(selected) == 1 && selected %in% names(available)) selected else names(available)[[1]])
   })
   refresh_card <- function() {
     if (is.null(user()) || is.null(input$algorithm) || is.null(algorithms[[input$algorithm]])) { candidate(NULL); return(invisible(NULL)) }
     a <- get_profile(con, user()); if (is.null(a) || !completed_required(con, user(), questionnaires)) { candidate(NULL); return(invisible(NULL)) }
     mode <- current_mode(); algorithm <- algorithms[[input$algorithm]]
     if (isTRUE(algorithm$learned) && !(mode %in% algorithm$supported_modes)) { candidate(NULL); return(invisible(NULL)) }
-    suggestions <- discover(con, a, questionnaires, algorithm, isTRUE(input$explore) && mode == "love", mode)
-    if (!length(suggestions)) { candidate(NULL); impression(NULL); return(invisible(NULL)) }
-    card <- suggestions[[1]]; impression(log_impression(con, user(), card$profile$user_id, algorithm, questionnaires, card$features, mode)); candidate(card)
+    card <- daily_connection(con,user(),questionnaires,algorithms,algorithm,mode,isTRUE(input$explore),record_view=FALSE)
+    if(is.null(card)){candidate(NULL);impression(NULL);return(invisible(NULL))}
+    impression(card$impression_id);candidate(card)
   }
   observeEvent(list(user(), input$algorithm, input$explore, input$discovery_mode, revision()), refresh_card())
-  observeEvent(input$refresh, attempt(refresh_card()))
+  observeEvent(input$refresh,attempt(refresh_card()))
+  observeEvent(input$more_connections,attempt({req(user(),input$algorithm);rate_limit(con,user(),"additional_batch",10L,3600L)
+    daily_connection(con,user(),questionnaires,algorithms,algorithms[[input$algorithm]],current_mode(),isTRUE(input$explore),more=TRUE,record_view=FALSE);bump()
+  }))
+  output$daily_status<-renderUI({req(user());revision();mode<-current_mode();day<-format(Sys.time(),"%Y-%m-%d",tz="Europe/Prague")
+    n<-DBI::dbGetQuery(con,"SELECT COUNT(*) AS n FROM daily_connections d JOIN recommendation_batches b ON b.id=d.batch_id WHERE b.actor_id=? AND b.mode=? AND b.day_key=?",params=list(user(),mode,day))$n[[1]]
+    tags$p(class="daily-status",paste("Your collection:",n,"introductions today. Save someone or explore more at your own pace."))
+  })
+  output$saved_picker<-renderUI({req(user());revision();mode<-current_mode();r<-DBI::dbGetQuery(con,"SELECT target_id FROM saved_connections WHERE actor_id=? AND mode=? ORDER BY created_at",params=list(user(),mode));choices<-character()
+    for(id in r$target_id){p<-get_profile(con,id);if(eligible_pair(con,get_profile(con,user()),p,mode))choices[p$name]<-id}
+    if(!length(choices))return(NULL)
+    tags$div(class="saved-discovery",selectInput("saved_person","Saved for later",choices),actionButton("resume_saved","Revisit saved profile",class="btn-outline-primary full-width"))
+  })
+  observeEvent(input$save_candidate,attempt({req(user(),candidate());save_for_later(con,user(),candidate()$profile$user_id,current_mode());bump();showNotification("Saved for later. No interest request was sent.",type="message")}))
+  observeEvent(input$resume_saved,attempt({req(user(),input$saved_person);mode<-current_mode();id<-input$saved_person
+    saved<-DBI::dbGetQuery(con,"SELECT 1 FROM saved_connections WHERE actor_id=? AND target_id=? AND mode=?",params=list(user(),id,mode));assert(nrow(saved)==1,"Choose your own saved profile.")
+    a<-get_profile(con,user());p<-get_profile(con,id);assert(eligible_pair(con,a,p,mode),"This profile is unavailable.")
+    alg<-algorithms[[input$algorithm]];req(alg);x<-pair_features(con,a,p,questionnaires,mode=mode);imp<-log_impression(con,user(),id,alg,questionnaires,x,mode)
+    candidate(list(profile=p,features=x,score=as.numeric(alg$score(x)),mode=mode,outside_preferences=preference_fit(a,p,mode)$score<1,explanations=match_explanations(con,a,p,mode),algorithm_id=alg$id));impression(imp)
+  }))
+  observeEvent(input$view_full_profile,attempt({req(user(),candidate());p<-get_profile(con,candidate()$profile$user_id);assert(eligible_pair(con,get_profile(con,user()),p,current_mode()),"Profile unavailable.");x<-member_context(con,p$user_id)
+    showModal(modalDialog(title=paste0(p$name,", ",p$age),tags$p(paste(p$gender,p$city,sep=" · ")),tags$p(p$bio),tags$h4("Beyond the photo"),lapply(names(BEYOND_PROMPTS),function(key)if(nzchar(x$beyond[[key]]%||%""))tagList(tags$b(BEYOND_PROMPTS[[key]]),tags$p(x$beyond[[key]]))),tags$p(class="fine-print","These are shared profile prompts. Questionnaire answers are private."),easyClose=TRUE,footer=modalButton("Back to introduction")))
+  }))
   output$candidate_card <- renderUI({
     req(user()); card <- candidate()
     if (is.null(profile()) || !completed_required(con, user(), questionnaires)) return(empty_state("Your story comes first.", "A short introduction and ten thoughtful questions. Then, a world of possibilities."))
+    if(member_context(con,user())$availability=="paused") return(empty_state("You're taking a break.","Your profile is hidden from new discovery. Your existing mutual conversations remain available; return to My profile when you want new introductions."))
     if (is.null(card)) return(empty_state("A little room for what's next.", "You're all caught up in this space. New people and new possibilities will appear as the community grows."))
     mode <- card$mode %||% current_mode(); p <- get_profile(con, card$profile$user_id)
     if (is.null(p) || mode != current_mode() || !eligible_pair(con, get_profile(con, user()), p, mode)) return(empty_state("A new perspective is waiting.", "Refresh your suggestions to continue."))
-    photo <- photo_path(con, user(), p$user_id, photo_dir, questionnaires); algorithm <- algorithms[[input$algorithm]]
+    photo <- photo_path(con, user(), p$user_id, photo_dir, questionnaires); algorithm <- algorithms[[card$algorithm_id %||% input$algorithm]]
+    if(!is.null(card$daily_id)) {
+      imp <- serve_daily_card(con,user(),card,algorithm,questionnaires)
+      if(!identical(isolate(impression()),imp)) impression(imp)
+    }
     demo <- if (isTRUE(as.logical(p$is_demo))) switch(p$name, Maya = "female", Leo = "male", Alex = "nonbinary", NULL) else NULL
     interests <- read_interest_state(con, p$user_id, catalog, TRUE); labels <- interest_labels(interests$selected, catalog)
     if (!length(labels)) labels <- p$hobbies
@@ -219,13 +255,13 @@ app_server <- function(input, output, session, db_path, photo_dir, questionnaire
       if (!is.null(photo)) imageOutput("candidate_image", height = "345px") else if (!is.null(demo)) demo_portrait(demo, label = paste("AI-created fictional demo portrait for", p$name)) else tags$div(class = "portrait-placeholder", tags$span(toupper(substr(p$name, 1, 1))), tags$p("A PERSON WORTH GETTING TO KNOW")),
       tags$span(class = "visual-mode", if (mode == "love") "Open to love" else "Open to friendship"), if (!is.null(demo) && is.null(photo)) tags$span(class = "demo-photo-note", "FICTIONAL DEMO PORTRAIT"),
       tags$div(class = "visual-pill", if (card$outside_preferences) "A LITTLE OUTSIDE YOUR USUAL TYPE" else if (mode == "friends") "A LITTLE SOMETHING IN COMMON" else "A THOUGHTFUL INTRODUCTION")),
-      tags$div(class = "candidate-body", tags$div(class = "name-line", tags$h2(paste0(p$name, ", ", p$age)), tags$div(class = "points", tags$b(round(card$score * 100)), tags$small("fit / 100"))),
+      tags$div(class = "candidate-body", tags$div(class="recommendation-reasons",lapply(card$explanations %||% character(),tags$p)), tags$div(class = "name-line", tags$h2(paste0(p$name, ", ", p$age)), tags$div(class = "points", tags$b(round(card$score * 100)), tags$small("fit / 100"))),
         tags$p(class = "muted", paste(p$gender, p$city, sep = " · ")), tags$p(p$bio), tags$div(class = "tag-row", lapply(head(labels, 6), pill)),
         if (mode == "love") tags$p(class = "fine-print", paste(c(p$goal, p$style, if (!is.na(p$height)) paste0("Approx. ", round(p$height), " cm · questionnaire estimate")), collapse = " · ")),
         tags$div(class = "fit-breakdown", tags$p(tags$b("A few reasons to be curious")), tags$div(class = "fit-bars", if (mode == "love") mini("Your preferences", card$features[["own_preferences"]]) else mini("Interests", card$features[["interest_overlap"]]), mini("Everyday life", card$features[["lifestyle_compatibility"]]), mini("Things to share", card$features[["shared_activity_potential"]])), tags$p(class = "fine-print", "Experimental fit points. Unanswered optional features use neutral placeholders; no score promises a connection.")),
         tags$div(class = "chance-note", tags$b(if (mode == "friends") "Friendship starts with mutual choice." else "The feeling has to be mutual."),
-          if (isTRUE(algorithm$learned)) tags$p(paste0(round(100 * algorithm$predict(reverse_features(card$features))), "% estimated chance of a connection request after viewing · experimental pilot, not an outcome forecast.")) else tags$p("Their interest isn't estimated yet. A fit score is a reason to explore, not a prediction of their answer.")),
-        tags$div(class = "decision-row", actionButton("pass", "Maybe another time", class = "btn-outline-secondary"), actionButton("like", if (mode == "love") "I'd like to connect ↗" else "Let's be friends ↗", class = "btn-primary")),
+          tags$p("A fit score describes common ground. Attraction and chemistry are something you discover together.")),
+        tags$div(class = "decision-row", actionButton("pass", "Maybe another time", class = "btn-outline-secondary"), actionButton("like", if (mode == "love") "I'd like to connect ↗" else "Let's be friends ↗", class = "btn-primary")), tags$div(class="secondary-decisions", actionButton("save_candidate","Save for later",class="btn-outline-primary"),actionButton("view_full_profile","View full profile",class="btn-outline-primary")),
         tags$details(tags$summary("Safety & control"), textInput("candidate_report_reason", "Reason for reporting"), actionButton("block_candidate", "Block", class = "btn-outline-secondary"), actionButton("report_candidate", "Report & block", class = "btn-outline-secondary"))))
   })
   output$candidate_image <- renderImage({ req(user(), candidate()); pulse(); path <- photo_path(con, user(), candidate()$profile$user_id, photo_dir, questionnaires); req(!is.null(path)); list(src = path, contentType = "image/png", alt = "Profile photo") }, deleteFile = FALSE)
@@ -328,6 +364,13 @@ app_server <- function(input, output, session, db_path, photo_dir, questionnaire
       m <- messages[i, ]; tags$div(class = if (m$sender_id == user()) "message mine" else "message theirs", tags$p(m$body), tags$small(format(as.POSIXct(substr(m$created_at, 1, 19), format = "%Y-%m-%dT%H:%M:%S", tz = "UTC"), "%d %b · %H:%M UTC")))
     }))
   })
+  output$conversation_tools<-renderUI({req(user());revision();chat<-tryCatch(selected_chat(),error=function(e)NULL);if(is.null(chat))return(NULL)
+    tags$div(class="conversation-tools",tags$p(conversation_starter(con,user(),chat$target)),actionButton("use_starter","Use this conversation starter",class="btn-outline-primary"),actionButton("draft_closure","Draft a respectful goodbye",class="btn-link"),tags$p(class="fine-print","These actions only fill the composer. You choose whether to send."))
+  })
+  observeEvent(input$use_starter,attempt({chat<-selected_chat();updateTextAreaInput(session,"message",value=conversation_starter(con,user(),chat$target))}))
+  observeEvent(input$draft_closure,attempt({selected_chat();updateTextAreaInput(session,"message",value="Thank you for chatting. I don't feel the connection I'm looking for, but I wish you well.")}))
+  observeEvent(input$unmatch_chat,attempt({chat<-selected_chat();unmatch(con,user(),chat$target,chat$mode);bump();showNotification("Connection closed in this space.",type="message")}))
+  output$export_my_data<-downloadHandler(filename=function()paste0("soulmatch-my-data-",format(Sys.Date(),"%Y-%m-%d"),".json"),contentType="application/json",content=function(file){req(user());rate_limit(con,user(),"export",5L,3600L);writeLines(jsonlite::toJSON(export_own_data(con,user()),auto_unbox=TRUE,pretty=TRUE,null="null",na="null"),file,useBytes=TRUE)})
   observeEvent(input$send, attempt({ req(user()); chat <- selected_chat(); send_message(con, user(), chat$target, input$message, chat$mode); updateTextAreaInput(session, "message", value = ""); bump() }))
   block_person <- function(target, reason = NULL) {
     req(user()); assert(!is.null(target) && target != user() && !is.null(get_profile(con, target)), "Choose an available profile.")

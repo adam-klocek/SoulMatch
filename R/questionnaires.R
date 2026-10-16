@@ -27,7 +27,7 @@ load_registry <- function(path = getOption("soulmatch.questionnaire_dir", "confi
 active_instruments <- function(registry) Filter(function(q) isTRUE(q$enabled), registry)
 registry_signature <- function(registry) {
   active <- active_instruments(registry)
-  paste0("soulmatch-v2:interests_lifestyle@1.0.0:scoped-modes|", paste(vapply(active, function(q) paste(q$id, q$version, isTRUE(q$use_for_matching), sep = ":"), ""), collapse = "|"))
+  paste0("soulmatch-v3:context-preferences:interests_lifestyle@1.0.0:scoped-modes|", paste(vapply(active, function(q) paste(q$id, q$version, isTRUE(q$use_for_matching), sep = ":"), ""), collapse = "|"))
 }
 score_answers <- function(q, answers) {
   assert(isTRUE(q$enabled), "This questionnaire is not active.")

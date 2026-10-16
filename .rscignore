@@ -1,0 +1,9 @@
+data
+.Renviron
+.Rhistory
+.RData
+.Rproj.user
+design
+tests
+third_party
+MANIFEST.sha256

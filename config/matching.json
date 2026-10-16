@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0", "daily_count": 6, "exploration": 0.10, "exposure_bonus": 0.06,
+  "weights": {
+    "love": {"own_preferences":0.2,"other_preferences":0.2,"questionnaire_similarity":0.2,"own_interest_satisfaction":0.075,"other_interest_satisfaction":0.075,"lifestyle_compatibility":0.1,"shared_activity_potential":0.1,"same_goal":0.05},
+    "friends": {"own_interest_satisfaction":0.175,"other_interest_satisfaction":0.175,"lifestyle_compatibility":0.25,"shared_activity_potential":0.2,"same_city":0.1,"interest_overlap":0.1}
+  }
+}

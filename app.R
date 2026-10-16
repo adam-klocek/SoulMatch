@@ -1,6 +1,6 @@
 library(shiny)
 library(bslib)
-for (file in c("utils", "migrations", "database", "questionnaires", "interests_data", "interest_features", "matching", "photos", "height", "interests_modules", "demo", "world", "ui", "server")) source(file.path("R", paste0(file, ".R")), local = TRUE)
+for (file in c("utils", "v1_services", "migrations", "database", "questionnaires", "interests_data", "interest_features", "matching", "photos", "height", "interests_modules", "demo", "world", "brand", "v1_modules", "ui", "server")) source(file.path("R", paste0(file, ".R")), local = TRUE)
 options(soulmatch.www_dir = normalizePath("www"))
 options(shiny.maxRequestSize = 5 * 1024^2, shiny.sanitize.errors = TRUE)
 data_dir <- Sys.getenv("SOULMATCH_DATA_DIR", Sys.getenv("KINDRED_DATA_DIR", "data"))

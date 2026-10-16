@@ -14,8 +14,8 @@ connection_summaries <- function(con, viewer, registry, algorithms, catalog = lo
     interests <- interest_pair_features(con, viewer, id, catalog)
     qs <- questionnaire_similarity(con, viewer, id, registry)
     metrics <- c("Overall fit" = as.numeric(algorithms$balanced$score(features)),
-      "Your preference fit" = if (mode == "love") preference_fit(me, other)$score else NA_real_,
-      "Their preference fit" = if (mode == "love") preference_fit(other, me)$score else NA_real_,
+      "Your preference fit" = if (mode == "love") unname(features["own_preferences"]) else NA_real_,
+      "Their preference fit" = if (mode == "love") unname(features["other_preferences"]) else NA_real_,
       "Reflection similarity" = if (qs$coverage > 0) qs$similarity else NA_real_,
       "Lifestyle fit" = unname(interests["lifestyle_compatibility"]),
       "Shared interests" = unname(interests["interest_overlap"]),

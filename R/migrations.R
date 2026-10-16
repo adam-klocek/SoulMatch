@@ -39,6 +39,7 @@ migrate_soulmatch <- function(con) {
     DBI::dbExecute(con, "INSERT INTO schema_version VALUES(3)")
     changed <- TRUE
   })
+  if (v1_migrate(con)) changed <- TRUE
   if (changed) {
     DBI::dbExecute(con, "PRAGMA wal_checkpoint(TRUNCATE)")
     DBI::dbExecute(con, "VACUUM")
