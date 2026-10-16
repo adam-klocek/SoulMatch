@@ -1,0 +1,11 @@
+Package: soulmatch
+Title: SoulMatch Dating App MVP
+Version: 0.3.0
+Authors@R: person("SoulMatch", "Team", role = c("aut", "cre"), email = "team@example.invalid")
+Description: A modular Shiny dating prototype with versioned questionnaires,
+    reciprocal preference matching, local accounts, private mutual-match chat,
+    and an offline supervised learning pipeline.
+License: GPL-3 + file LICENSE
+Encoding: UTF-8
+Imports: shiny (>= 1.8.0), bslib (>= 0.6.0), DBI, RSQLite, jsonlite, sodium, png, jpeg
+Suggests: testthat (>= 3.0.0), withr

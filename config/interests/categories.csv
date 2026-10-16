@@ -1,0 +1,17 @@
+id,label,sort_order
+sports_fitness,Sports & Fitness,1
+nature_outdoors,Nature & Outdoors,2
+travel_exploration,Travel & Exploration,3
+art_creativity,Art & Creativity,4
+music_entertainment,Music & Entertainment,5
+movies_media,"Movies, TV & Media",6
+books_learning,Books & Learning,7
+food_drinks,Food & Drinks,8
+gaming_technology,Gaming & Technology,9
+social_life,Social Life & Activities,10
+wellness_growth,Wellness & Personal Growth,11
+home_lifestyle,Home & Lifestyle,12
+animals_pets,Animals & Pets,13
+business_ambition,Business & Ambition,14
+culture_society,Culture & Society,15
+adventure_novelty,Adventure & Novelty,16

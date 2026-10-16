@@ -1,0 +1,24 @@
+{
+  "id": "soulmatch_big_five10",
+  "version": "1.0.0",
+  "label": "Your personality \u00b7 10 items",
+  "enabled": true,
+  "required": true,
+  "use_for_matching": true,
+  "item_file": "big_five10.csv",
+  "item_count": 10,
+  "scale_min": 1,
+  "scale_max": 5,
+  "scale_labels": [
+    "Very inaccurate",
+    "Moderately inaccurate",
+    "Neither inaccurate nor accurate",
+    "Moderately accurate",
+    "Very accurate"
+  ],
+  "instructions": "How accurately does each statement describe you? Two items explore each Big Five domain. This custom short screener is experimental; it is not the BFI-2 and has not been validated as a 10-item scale.",
+  "permission_note": "Items selected from the public-domain IPIP factor-marker pool. Custom selection, not an established scale.",
+  "source": "https://ipip.ori.org/newBigFive5broadKey.htm",
+  "badge": "START HERE \u00b7 ABOUT 2 MIN",
+  "page_size": 5
+}

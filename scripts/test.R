@@ -1,0 +1,7 @@
+library(shiny)
+library(bslib)
+options(soulmatch.www_dir = normalizePath("www"), soulmatch.questionnaire_dir = normalizePath("config/questionnaires"), soulmatch.interest_dir = normalizePath("config/interests"), soulmatch.height_file = normalizePath("config/height.json"))
+for (file in c("utils", "migrations", "database", "questionnaires", "interests_data", "interest_features", "matching", "photos", "height", "interests_modules", "demo", "world", "learning", "ui", "server")) source(file.path("R", paste0(file, ".R")))
+results <- testthat::test_dir("tests/testthat", reporter = "summary", stop_on_failure = TRUE)
+summary <- as.data.frame(results)
+message("Verified ", sum(summary$passed), " passing expectations across ", nrow(summary), " behavioral tests.")

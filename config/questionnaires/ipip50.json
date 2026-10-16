@@ -1,0 +1,22 @@
+{
+  "id": "ipip_bffm50",
+  "version": "1.0.0",
+  "label": "Big Five \u00b7 IPIP factor markers (50 items)",
+  "enabled": false,
+  "required": false,
+  "use_for_matching": false,
+  "item_file": "ipip50.csv",
+  "item_count": 50,
+  "scale_min": 1,
+  "scale_max": 5,
+  "scale_labels": [
+    "Very inaccurate",
+    "Moderately inaccurate",
+    "Neither inaccurate nor accurate",
+    "Moderately accurate",
+    "Very accurate"
+  ],
+  "instructions": "Describe yourself as you generally are now. Rate how accurately each statement describes you. Your answers remain private. This measures personality, not romantic compatibility.",
+  "permission_note": "Public-domain IPIP items and scoring key; https://ipip.ori.org/newPermission.htm",
+  "source": "https://ipip.ori.org/newBigFive5broadKey.htm"
+}

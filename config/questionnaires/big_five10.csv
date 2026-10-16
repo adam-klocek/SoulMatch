@@ -1,0 +1,11 @@
+id,text,domain,reverse
+ipip_01,Am the life of the party.,Extraversion,0
+ipip_06,Don't talk a lot.,Extraversion,1
+ipip_12,Sympathize with others’ feelings.,Agreeableness,0
+ipip_20,Feel little concern for others.,Agreeableness,1
+ipip_21,Am always prepared.,Conscientiousness,0
+ipip_28,Make a mess of things.,Conscientiousness,1
+ipip_31,Am relaxed most of the time.,Emotional stability,0
+ipip_33,Get stressed out easily.,Emotional stability,1
+ipip_42,Have a vivid imagination.,Intellect / imagination,0
+ipip_50,Do not have a good imagination.,Intellect / imagination,1

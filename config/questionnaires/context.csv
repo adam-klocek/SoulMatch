@@ -1,0 +1,7 @@
+id,text,domain,reverse
+ctx_1,I enjoy spending most free evenings with my partner.,togetherness,0
+ctx_2,I prefer planning dates in advance.,planning,0
+ctx_3,I want to discuss disagreements soon after they happen.,conflict_timing,0
+ctx_4,Shared long-term plans are important to me.,future_planning,0
+ctx_5,I enjoy trying unfamiliar activities together.,novelty,0
+ctx_6,I prefer frequent messages throughout the day.,contact,0

@@ -1,0 +1,13 @@
+data/*
+!data/.gitkeep
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+renv/staging/
+*.tar.gz
+config/models/*.rds
+.Renviron
+.Renviron.*
+!.Renviron.example
+*.sqlite*

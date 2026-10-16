@@ -1,0 +1,62 @@
+{
+  "id": "brno_height11",
+  "version": "1.0.0",
+  "source": "https://fssvm6.fss.muni.cz/vyska/",
+  "items": [
+    {
+      "id": "p1",
+      "cs": "Mám vhodnou výšku na hraní basketbalu nebo volejbalu.",
+      "en": "I am a suitable height for playing basketball or volleyball."
+    },
+    {
+      "id": "p2",
+      "cs": "Slýchávám narážky na to, že jsem vysoký/á.",
+      "en": "I hear comments about being tall."
+    },
+    {
+      "id": "p3",
+      "cs": "Lidem, kteří na koncertě stojí za mnou, většinou má postava dost brání ve výhledu.",
+      "en": "At concerts, I tend to block the view of people standing behind me."
+    },
+    {
+      "id": "p4",
+      "cs": "Když chci někoho obejmout, většinou se musím sklonit.",
+      "en": "When I hug someone, I usually need to bend down."
+    },
+    {
+      "id": "p5",
+      "cs": "Často si musím dávat pozor, abych se neuhodil/a hlavou např. o nízký strop nebo rám dveří.",
+      "en": "I often have to watch out for low ceilings or door frames."
+    },
+    {
+      "id": "p6",
+      "cs": "Často potřebuji stoličku, abych dosáhl/a na něco, na co jiní lidé dosáhnou normálně.",
+      "en": "I often need a stool to reach things that others can reach normally."
+    },
+    {
+      "id": "p7",
+      "cs": "Jednou z prvních věcí, které si na mně lidé všimnou, je to, jak moc jsem malý/á.",
+      "en": "One of the first things people notice is how short I am."
+    },
+    {
+      "id": "p8",
+      "cs": "Často musím stát na špičkách, abych lépe viděl/a.",
+      "en": "I often stand on tiptoe to see better."
+    },
+    {
+      "id": "p9",
+      "cs": "V autobuse mívám dostatek prostoru pro nohy.",
+      "en": "I usually have plenty of legroom on a bus."
+    },
+    {
+      "id": "p10",
+      "cs": "Kvůli mé menší výšce lidé hádají, že jsem mladší, než ve skutečnosti jsem.",
+      "en": "My shorter stature leads people to guess I am younger than I am."
+    },
+    {
+      "id": "p11",
+      "cs": "Když mluvím s jinými dospělými a chci se jim dívat do oči, častěji na ně spíš vzhlížím nahoru.",
+      "en": "When looking other adults in the eye, I more often look upwards."
+    }
+  ]
+}

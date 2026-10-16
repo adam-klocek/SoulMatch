@@ -1,0 +1,22 @@
+{
+  "id": "connection_context",
+  "version": "1.0.0",
+  "label": "Everyday connection (6 questions)",
+  "enabled": false,
+  "required": false,
+  "use_for_matching": false,
+  "item_file": "context.csv",
+  "item_count": 6,
+  "scale_min": 1,
+  "scale_max": 5,
+  "scale_labels": [
+    "Strongly disagree",
+    "Disagree",
+    "Neutral",
+    "Agree",
+    "Strongly agree"
+  ],
+  "instructions": "Think about your preferred relationship. These original contextual questions are experimental and have no established psychometric or predictive validity.",
+  "permission_note": "Original project content, MIT license.",
+  "source": "Original MVP contextual questions; not a validated scale."
+}

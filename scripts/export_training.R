@@ -1,0 +1,10 @@
+# Run locally as the database operator. This is deliberately not a public app download.
+for (f in c("utils", "migrations", "database", "questionnaires", "interests_data", "interest_features", "matching", "learning")) source(file.path("R", paste0(f, ".R")))
+args <- commandArgs(trailingOnly = TRUE)
+assert(length(args) == 1, "Usage: Rscript scripts/export_training.R /private/path/decisions.jsonl")
+con <- open_db(resolve_db_path(Sys.getenv("SOULMATCH_DATA_DIR", Sys.getenv("KINDRED_DATA_DIR", "data"))))
+records <- export_training(con, load_registry()); DBI::dbDisconnect(con)
+assert(length(records) > 0, "No eligible non-demo, mutually opted-in labeled views to export.")
+writeLines(vapply(records, to_json, ""), args[1], useBytes = TRUE)
+Sys.chmod(args[1], "0600")
+message("Exported ", length(records), " pseudonymous feature rows. Keep this file private.")

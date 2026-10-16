@@ -1,0 +1,250 @@
+{
+  "id": "interests_lifestyle",
+  "version": "1.0.0",
+  "version_id": "interests_lifestyle@1.0.0",
+  "lifestyle": [
+    {
+      "id": "social_energy",
+      "prompt": "How do you most enjoy spending your free time?",
+      "measurement_type": "nominal",
+      "options": [
+        {
+          "value": "social_energy_1",
+          "label": "Mostly alone"
+        },
+        {
+          "value": "social_energy_2",
+          "label": "With one or two close people"
+        },
+        {
+          "value": "social_energy_3",
+          "label": "In small groups"
+        },
+        {
+          "value": "social_energy_4",
+          "label": "In large social gatherings"
+        },
+        {
+          "value": "social_energy_5",
+          "label": "A mix, depending on my mood"
+        }
+      ]
+    },
+    {
+      "id": "weekend",
+      "prompt": "What does your ideal weekend look like?",
+      "measurement_type": "nominal",
+      "options": [
+        {
+          "value": "weekend_1",
+          "label": "Relaxing at home"
+        },
+        {
+          "value": "weekend_2",
+          "label": "Spending time with friends"
+        },
+        {
+          "value": "weekend_3",
+          "label": "Outdoor activities"
+        },
+        {
+          "value": "weekend_4",
+          "label": "Exploring new places"
+        },
+        {
+          "value": "weekend_5",
+          "label": "Cultural activities"
+        },
+        {
+          "value": "weekend_6",
+          "label": "A balance of several activities"
+        }
+      ]
+    },
+    {
+      "id": "physical_activity",
+      "prompt": "How physically active are you in your everyday life?",
+      "measurement_type": "ordinal",
+      "options": [
+        {
+          "value": "physical_activity_1",
+          "label": "Mostly sedentary"
+        },
+        {
+          "value": "physical_activity_2",
+          "label": "Lightly active"
+        },
+        {
+          "value": "physical_activity_3",
+          "label": "Moderately active"
+        },
+        {
+          "value": "physical_activity_4",
+          "label": "Very active"
+        },
+        {
+          "value": "physical_activity_5",
+          "label": "Extremely active"
+        }
+      ]
+    },
+    {
+      "id": "travel_frequency",
+      "prompt": "How often do you like to travel?",
+      "measurement_type": "ordinal",
+      "options": [
+        {
+          "value": "travel_frequency_1",
+          "label": "Rarely"
+        },
+        {
+          "value": "travel_frequency_2",
+          "label": "Once a year"
+        },
+        {
+          "value": "travel_frequency_3",
+          "label": "A few times per year"
+        },
+        {
+          "value": "travel_frequency_4",
+          "label": "Frequently"
+        },
+        {
+          "value": "travel_frequency_5",
+          "label": "Whenever possible"
+        }
+      ]
+    },
+    {
+      "id": "spending",
+      "prompt": "Which statement best describes your approach to spending?",
+      "measurement_type": "nominal",
+      "options": [
+        {
+          "value": "spending_1",
+          "label": "I strongly prioritize saving money"
+        },
+        {
+          "value": "spending_2",
+          "label": "I prefer a balanced approach"
+        },
+        {
+          "value": "spending_3",
+          "label": "I enjoy spending on experiences"
+        },
+        {
+          "value": "spending_4",
+          "label": "I enjoy premium experiences and comfort"
+        },
+        {
+          "value": "spending_5",
+          "label": "It depends on the situation"
+        }
+      ]
+    },
+    {
+      "id": "daily_rhythm",
+      "prompt": "Which daily rhythm suits you best?",
+      "measurement_type": "ordinal",
+      "options": [
+        {
+          "value": "daily_rhythm_1",
+          "label": "Definitely an early bird"
+        },
+        {
+          "value": "daily_rhythm_2",
+          "label": "Somewhat an early bird"
+        },
+        {
+          "value": "daily_rhythm_3",
+          "label": "Flexible"
+        },
+        {
+          "value": "daily_rhythm_4",
+          "label": "Somewhat a night owl"
+        },
+        {
+          "value": "daily_rhythm_5",
+          "label": "Definitely a night owl"
+        }
+      ]
+    },
+    {
+      "id": "planning",
+      "prompt": "How do you prefer to organize your activities?",
+      "measurement_type": "ordinal",
+      "options": [
+        {
+          "value": "planning_1",
+          "label": "Very spontaneously"
+        },
+        {
+          "value": "planning_2",
+          "label": "Mostly spontaneously"
+        },
+        {
+          "value": "planning_3",
+          "label": "A mix of both"
+        },
+        {
+          "value": "planning_4",
+          "label": "Mostly planned"
+        },
+        {
+          "value": "planning_5",
+          "label": "Very structured and planned"
+        }
+      ]
+    }
+  ],
+  "shared_activities": [
+    {
+      "id": "shared_01",
+      "label": "Cooking together"
+    },
+    {
+      "id": "shared_02",
+      "label": "Traveling together"
+    },
+    {
+      "id": "shared_03",
+      "label": "Exercising together"
+    },
+    {
+      "id": "shared_04",
+      "label": "Watching movies"
+    },
+    {
+      "id": "shared_05",
+      "label": "Reading together"
+    },
+    {
+      "id": "shared_06",
+      "label": "Going to concerts"
+    },
+    {
+      "id": "shared_07",
+      "label": "Exploring nature"
+    },
+    {
+      "id": "shared_08",
+      "label": "Learning new things"
+    },
+    {
+      "id": "shared_09",
+      "label": "Playing games"
+    },
+    {
+      "id": "shared_10",
+      "label": "Attending cultural events"
+    },
+    {
+      "id": "shared_11",
+      "label": "Spending quiet evenings together"
+    },
+    {
+      "id": "shared_12",
+      "label": "Trying new restaurants"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+data/*
+.git
+.Rproj.user
+renv/library
+config/models/*.rds

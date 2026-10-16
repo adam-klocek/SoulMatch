@@ -1,0 +1,51 @@
+id,text,domain,reverse
+ipip_01,Am the life of the party.,Extraversion,0
+ipip_02,Feel comfortable around people.,Extraversion,0
+ipip_03,Start conversations.,Extraversion,0
+ipip_04,Talk to a lot of different people at parties.,Extraversion,0
+ipip_05,Don't mind being the center of attention.,Extraversion,0
+ipip_06,Don't talk a lot.,Extraversion,1
+ipip_07,Keep in the background.,Extraversion,1
+ipip_08,Have little to say.,Extraversion,1
+ipip_09,Don't like to draw attention to myself.,Extraversion,1
+ipip_10,Am quiet around strangers.,Extraversion,1
+ipip_11,Am interested in people.,Agreeableness,0
+ipip_12,Sympathize with others’ feelings.,Agreeableness,0
+ipip_13,Have a soft heart.,Agreeableness,0
+ipip_14,Take time out for others.,Agreeableness,0
+ipip_15,Feel others’ emotions.,Agreeableness,0
+ipip_16,Make people feel at ease.,Agreeableness,0
+ipip_17,Am not really interested in others.,Agreeableness,1
+ipip_18,Insult people.,Agreeableness,1
+ipip_19,Am not interested in other people’s problems.,Agreeableness,1
+ipip_20,Feel little concern for others.,Agreeableness,1
+ipip_21,Am always prepared.,Conscientiousness,0
+ipip_22,Pay attention to details.,Conscientiousness,0
+ipip_23,Get chores done right away.,Conscientiousness,0
+ipip_24,Like order.,Conscientiousness,0
+ipip_25,Follow a schedule.,Conscientiousness,0
+ipip_26,Am exacting in my work.,Conscientiousness,0
+ipip_27,Leave my belongings around.,Conscientiousness,1
+ipip_28,Make a mess of things.,Conscientiousness,1
+ipip_29,Often forget to put things back in their proper place.,Conscientiousness,1
+ipip_30,Shirk my duties.,Conscientiousness,1
+ipip_31,Am relaxed most of the time.,Emotional stability,0
+ipip_32,Seldom feel blue.,Emotional stability,0
+ipip_33,Get stressed out easily.,Emotional stability,1
+ipip_34,Worry about things.,Emotional stability,1
+ipip_35,Am easily disturbed.,Emotional stability,1
+ipip_36,Get upset easily.,Emotional stability,1
+ipip_37,Change my mood a lot.,Emotional stability,1
+ipip_38,Have frequent mood swings.,Emotional stability,1
+ipip_39,Get irritated easily.,Emotional stability,1
+ipip_40,Often feel blue.,Emotional stability,1
+ipip_41,Have a rich vocabulary.,Intellect / imagination,0
+ipip_42,Have a vivid imagination.,Intellect / imagination,0
+ipip_43,Have excellent ideas.,Intellect / imagination,0
+ipip_44,Am quick to understand things.,Intellect / imagination,0
+ipip_45,Use difficult words.,Intellect / imagination,0
+ipip_46,Spend time reflecting on things.,Intellect / imagination,0
+ipip_47,Am full of ideas.,Intellect / imagination,0
+ipip_48,Have difficulty understanding abstract ideas.,Intellect / imagination,1
+ipip_49,Am not interested in abstract ideas.,Intellect / imagination,1
+ipip_50,Do not have a good imagination.,Intellect / imagination,1

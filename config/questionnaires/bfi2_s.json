@@ -1,0 +1,22 @@
+{
+  "id": "bfi2_s",
+  "version": "1.0.0",
+  "label": "BFI-2-S (30 items) \u00b7 awaiting authorized content",
+  "enabled": false,
+  "required": false,
+  "use_for_matching": false,
+  "item_file": "bfi2_s_authorized.csv",
+  "item_count": 30,
+  "scale_min": 1,
+  "scale_max": 5,
+  "scale_labels": [
+    "Disagree strongly",
+    "Disagree a little",
+    "Neutral; no opinion",
+    "Agree a little",
+    "Agree strongly"
+  ],
+  "instructions": "Use the original authorized instructions and wording before enabling.",
+  "permission_note": "Not supplied. Operator must verify rights for the intended use and add the authorized item text and scoring key.",
+  "source": "Soto & John (2017), Short and extra-short forms of the Big Five Inventory\u20132. https://doi.org/10.1016/j.jrp.2017.02.004"
+}

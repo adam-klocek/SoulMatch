@@ -1,0 +1,24 @@
+{
+  "id": "soulmatch_communication",
+  "version": "1.0.0",
+  "label": "Communication & repair \u00b7 4 items",
+  "enabled": true,
+  "required": false,
+  "use_for_matching": true,
+  "item_file": "communication.csv",
+  "item_count": 4,
+  "scale_min": 1,
+  "scale_max": 5,
+  "scale_labels": [
+    "Strongly disagree",
+    "Disagree",
+    "Neither agree nor disagree",
+    "Agree",
+    "Strongly agree"
+  ],
+  "instructions": "A short, optional reflection. These original questions are experimental, not a validated assessment. Different styles can work well together; there is no ideal score.",
+  "permission_note": "Original SoulMatch experimental items. GPL-3.0.",
+  "source": "Original SoulMatch exploratory questionnaire; no established reliability or predictive validity.",
+  "badge": "OPTIONAL \u00b7 UNDER A MINUTE",
+  "page_size": 4
+}

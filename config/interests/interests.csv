@@ -1,0 +1,196 @@
+id,category_id,label,sort_order
+sports_fitness_01,sports_fitness,Gym / Weightlifting,1
+sports_fitness_02,sports_fitness,Running,2
+sports_fitness_03,sports_fitness,Cycling,3
+sports_fitness_04,sports_fitness,Hiking,4
+sports_fitness_05,sports_fitness,Swimming,5
+sports_fitness_06,sports_fitness,Yoga,6
+sports_fitness_07,sports_fitness,Pilates,7
+sports_fitness_08,sports_fitness,Dancing,8
+sports_fitness_09,sports_fitness,Team Sports,9
+sports_fitness_10,sports_fitness,Tennis / Badminton,10
+sports_fitness_11,sports_fitness,Climbing / Bouldering,11
+sports_fitness_12,sports_fitness,Martial Arts,12
+sports_fitness_13,sports_fitness,Skiing / Snowboarding,13
+sports_fitness_14,sports_fitness,Water Sports,14
+sports_fitness_15,sports_fitness,Walking,15
+sports_fitness_16,sports_fitness,Outdoor Workouts,16
+nature_outdoors_01,nature_outdoors,Nature Walks,1
+nature_outdoors_02,nature_outdoors,Camping,2
+nature_outdoors_03,nature_outdoors,Backpacking,3
+nature_outdoors_04,nature_outdoors,Mountaineering,4
+nature_outdoors_05,nature_outdoors,Gardening,5
+nature_outdoors_06,nature_outdoors,Wildlife,6
+nature_outdoors_07,nature_outdoors,Birdwatching,7
+nature_outdoors_08,nature_outdoors,Fishing,8
+nature_outdoors_09,nature_outdoors,Beach Activities,9
+nature_outdoors_10,nature_outdoors,Outdoor Adventures,10
+nature_outdoors_11,nature_outdoors,Sustainability,11
+nature_outdoors_12,nature_outdoors,Nature Photography,12
+travel_exploration_01,travel_exploration,City Breaks,1
+travel_exploration_02,travel_exploration,Backpacking Travel,2
+travel_exploration_03,travel_exploration,Luxury Travel,3
+travel_exploration_04,travel_exploration,Road Trips,4
+travel_exploration_05,travel_exploration,Cultural Travel,5
+travel_exploration_06,travel_exploration,Adventure Travel,6
+travel_exploration_07,travel_exploration,Beach Holidays,7
+travel_exploration_08,travel_exploration,Solo Travel,8
+travel_exploration_09,travel_exploration,Weekend Getaways,9
+travel_exploration_10,travel_exploration,Hidden Gems,10
+travel_exploration_11,travel_exploration,Museums Abroad,11
+travel_exploration_12,travel_exploration,Language Immersion,12
+art_creativity_01,art_creativity,Painting,1
+art_creativity_02,art_creativity,Drawing,2
+art_creativity_03,art_creativity,Photography,3
+art_creativity_04,art_creativity,Writing,4
+art_creativity_05,art_creativity,Creative Writing,5
+art_creativity_06,art_creativity,Poetry,6
+art_creativity_07,art_creativity,Pottery / Ceramics,7
+art_creativity_08,art_creativity,Fashion Design,8
+art_creativity_09,art_creativity,DIY / Crafting,9
+art_creativity_10,art_creativity,Graphic Design,10
+art_creativity_11,art_creativity,Architecture,11
+art_creativity_12,art_creativity,Digital Art,12
+music_entertainment_01,music_entertainment,Live Concerts,1
+music_entertainment_02,music_entertainment,Music Festivals,2
+music_entertainment_03,music_entertainment,Playing Instruments,3
+music_entertainment_04,music_entertainment,Singing,4
+music_entertainment_05,music_entertainment,DJing,5
+music_entertainment_06,music_entertainment,Classical Music,6
+music_entertainment_07,music_entertainment,Jazz,7
+music_entertainment_08,music_entertainment,Rock / Metal,8
+music_entertainment_09,music_entertainment,Pop,9
+music_entertainment_10,music_entertainment,Electronic Music,10
+music_entertainment_11,music_entertainment,Hip-Hop / R&B,11
+music_entertainment_12,music_entertainment,Indie Music,12
+music_entertainment_13,music_entertainment,Musicals,13
+music_entertainment_14,music_entertainment,Karaoke,14
+movies_media_01,movies_media,Cinema,1
+movies_media_02,movies_media,Documentaries,2
+movies_media_03,movies_media,Comedy,3
+movies_media_04,movies_media,Drama,4
+movies_media_05,movies_media,Romance,5
+movies_media_06,movies_media,Science Fiction,6
+movies_media_07,movies_media,Fantasy,7
+movies_media_08,movies_media,Horror,8
+movies_media_09,movies_media,Anime,9
+movies_media_10,movies_media,TV Series,10
+movies_media_11,movies_media,Podcasts,11
+movies_media_12,movies_media,Stand-up Comedy,12
+movies_media_13,movies_media,True Crime,13
+books_learning_01,books_learning,Fiction,1
+books_learning_02,books_learning,Nonfiction,2
+books_learning_03,books_learning,Psychology,3
+books_learning_04,books_learning,Philosophy,4
+books_learning_05,books_learning,History,5
+books_learning_06,books_learning,Science,6
+books_learning_07,books_learning,Literature,7
+books_learning_08,books_learning,Personal Development,8
+books_learning_09,books_learning,Languages,9
+books_learning_10,books_learning,Politics & Society,10
+books_learning_11,books_learning,Economics,11
+books_learning_12,books_learning,Book Clubs,12
+books_learning_13,books_learning,Lifelong Learning,13
+food_drinks_01,food_drinks,Cooking,1
+food_drinks_02,food_drinks,Baking,2
+food_drinks_03,food_drinks,Fine Dining,3
+food_drinks_04,food_drinks,Trying New Restaurants,4
+food_drinks_05,food_drinks,Coffee Culture,5
+food_drinks_06,food_drinks,Tea,6
+food_drinks_07,food_drinks,Wine Tasting,7
+food_drinks_08,food_drinks,Craft Beer,8
+food_drinks_09,food_drinks,Cocktails,9
+food_drinks_10,food_drinks,Street Food,10
+food_drinks_11,food_drinks,Vegetarian Cooking,11
+food_drinks_12,food_drinks,International Cuisines,12
+food_drinks_13,food_drinks,Food Festivals,13
+gaming_technology_01,gaming_technology,Video Games,1
+gaming_technology_02,gaming_technology,Board Games,2
+gaming_technology_03,gaming_technology,Card Games,3
+gaming_technology_04,gaming_technology,Strategy Games,4
+gaming_technology_05,gaming_technology,Tabletop RPGs,5
+gaming_technology_06,gaming_technology,Esports,6
+gaming_technology_07,gaming_technology,Programming,7
+gaming_technology_08,gaming_technology,Artificial Intelligence,8
+gaming_technology_09,gaming_technology,Gadgets,9
+gaming_technology_10,gaming_technology,Robotics,10
+gaming_technology_11,gaming_technology,Virtual Reality,11
+gaming_technology_12,gaming_technology,Technology News,12
+social_life_01,social_life,Meeting Friends,1
+social_life_02,social_life,House Parties,2
+social_life_03,social_life,Nightlife,3
+social_life_04,social_life,Clubbing,4
+social_life_05,social_life,Dinner Parties,5
+social_life_06,social_life,Hosting Gatherings,6
+social_life_07,social_life,Networking,7
+social_life_08,social_life,Community Events,8
+social_life_09,social_life,Social Dancing,9
+social_life_10,social_life,Pub Quizzes,10
+social_life_11,social_life,Festivals,11
+social_life_12,social_life,Volunteering,12
+wellness_growth_01,wellness_growth,Meditation,1
+wellness_growth_02,wellness_growth,Mindfulness,2
+wellness_growth_03,wellness_growth,Mental Wellbeing,3
+wellness_growth_04,wellness_growth,Therapy / Self-Reflection,4
+wellness_growth_05,wellness_growth,Healthy Living,5
+wellness_growth_06,wellness_growth,Nutrition,6
+wellness_growth_07,wellness_growth,Spirituality,7
+wellness_growth_08,wellness_growth,Journaling,8
+wellness_growth_09,wellness_growth,Self-Development,9
+wellness_growth_10,wellness_growth,Wellness Retreats,10
+wellness_growth_11,wellness_growth,Sauna / Spa,11
+wellness_growth_12,wellness_growth,Breathwork,12
+home_lifestyle_01,home_lifestyle,Interior Design,1
+home_lifestyle_02,home_lifestyle,Home Decorating,2
+home_lifestyle_03,home_lifestyle,Houseplants,3
+home_lifestyle_04,home_lifestyle,Home Improvement,4
+home_lifestyle_05,home_lifestyle,Minimalism,5
+home_lifestyle_06,home_lifestyle,Slow Living,6
+home_lifestyle_07,home_lifestyle,Sustainable Living,7
+home_lifestyle_08,home_lifestyle,Fashion / Style,8
+home_lifestyle_09,home_lifestyle,Vintage Shopping,9
+home_lifestyle_10,home_lifestyle,Home Cooking,10
+home_lifestyle_11,home_lifestyle,Cozy Evenings,11
+home_lifestyle_12,home_lifestyle,Collecting,12
+animals_pets_01,animals_pets,Dogs,1
+animals_pets_02,animals_pets,Cats,2
+animals_pets_03,animals_pets,Horses,3
+animals_pets_04,animals_pets,Animal Welfare,4
+animals_pets_05,animals_pets,Dog Walking,5
+animals_pets_06,animals_pets,Pet Training,6
+animals_pets_07,animals_pets,Wildlife Conservation,7
+animals_pets_08,animals_pets,Aquariums,8
+animals_pets_09,animals_pets,Pet Sitting,9
+animals_pets_10,animals_pets,Animal Volunteering,10
+business_ambition_01,business_ambition,Entrepreneurship,1
+business_ambition_02,business_ambition,Startups,2
+business_ambition_03,business_ambition,Investing,3
+business_ambition_04,business_ambition,Personal Finance,4
+business_ambition_05,business_ambition,Career Development,5
+business_ambition_06,business_ambition,Leadership,6
+business_ambition_07,business_ambition,Innovation,7
+business_ambition_08,business_ambition,Side Projects,8
+business_ambition_09,business_ambition,Professional Networking,9
+business_ambition_10,business_ambition,Social Entrepreneurship,10
+culture_society_01,culture_society,Museums,1
+culture_society_02,culture_society,Art Galleries,2
+culture_society_03,culture_society,Theater,3
+culture_society_04,culture_society,Cultural Festivals,4
+culture_society_05,culture_society,Local Traditions,5
+culture_society_06,culture_society,Social Issues,6
+culture_society_07,culture_society,Politics,7
+culture_society_08,culture_society,Environmental Causes,8
+culture_society_09,culture_society,Civic Engagement,9
+culture_society_10,culture_society,International Cultures,10
+culture_society_11,culture_society,Religious / Cultural Events,11
+adventure_novelty_01,adventure_novelty,Trying New Things,1
+adventure_novelty_02,adventure_novelty,Spontaneous Trips,2
+adventure_novelty_03,adventure_novelty,Escape Rooms,3
+adventure_novelty_04,adventure_novelty,Amusement Parks,4
+adventure_novelty_05,adventure_novelty,Extreme Sports,5
+adventure_novelty_06,adventure_novelty,Scuba Diving,6
+adventure_novelty_07,adventure_novelty,Surfing,7
+adventure_novelty_08,adventure_novelty,New Experiences,8
+adventure_novelty_09,adventure_novelty,Exploring New Places,9
+adventure_novelty_10,adventure_novelty,Outdoor Challenges,10
+adventure_novelty_11,adventure_novelty,Unusual Workshops,11
